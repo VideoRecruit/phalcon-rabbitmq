@@ -17,6 +17,9 @@
     "autoload": {
         "psr-4": {
             "VideoRecruit\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/Phalcon/RabbitMq/exceptions.php"
+        ]
     }
 }
