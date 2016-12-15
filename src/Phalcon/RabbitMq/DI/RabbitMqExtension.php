@@ -186,7 +186,8 @@ class RabbitMqExtension
 		foreach ($connections as $name => $config) {
 			$config = $this->mergeConfigs($config, $this->connectionDefaults);
 
-			$this->di->setShared(self::PREFIX_CONNECTION . $name, function () use ($config) {
+			$di = $this->di;
+			$di->setShared(self::PREFIX_CONNECTION . $name, function () use ($config, $di) {
 				return (new Connection(
 					$config['host'],
 					$config['port'],
@@ -202,7 +203,7 @@ class RabbitMqExtension
 					$config['context'],
 					$config['keepalive'],
 					$config['heartbeat']
-				))->setDi($this->di);
+				))->setDi($di);
 			});
 		}
 	}
