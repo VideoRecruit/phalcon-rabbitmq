@@ -1,0 +1,22 @@
+{
+    "name": "videorecruit/phalcon-rabbitmq",
+    "type": "library",
+    "description": "Integration of php-amqplib with RabbitMq and Phalcon Framework",
+    "keywords": ["phalcon", "rabbitmq", "php-amqp"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lukas Tomek",
+            "email": "tomeklukas@gmail.com"
+        }
+    ],
+    "require": {
+        "kdyby/rabbitmq": "~1.1",
+        "nette/di": "~2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "VideoRecruit\\": "src/"
+        }
+    }
+}
