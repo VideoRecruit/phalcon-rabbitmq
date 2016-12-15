@@ -153,6 +153,8 @@ class RabbitMqExtension
 				'a configuration service name within the DI container.');
 		}
 
+		$config = $this->mergeConfigs($config, $this->defaults);
+
 		$this->loadConnections($config['connection']);
 		$this->loadProducers($config['producers']);
 		$this->loadConsumers($config['consumers']);
