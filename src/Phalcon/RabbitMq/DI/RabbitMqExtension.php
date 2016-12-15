@@ -146,6 +146,8 @@ class RabbitMqExtension
 
 		if (is_string($config)) {
 			$config = (array) $di->get($config);
+		} elseif ($config instanceof Config) {
+			$config = $config->toArray();
 		} elseif (!is_array($config)) {
 			throw new InvalidArgumentException('Config has to be either an array or ' .
 				'a configuration service name within the DI container.');
