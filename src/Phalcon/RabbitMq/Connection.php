@@ -8,6 +8,7 @@ use Kdyby\RabbitMq\Producer;
 use Kdyby\RabbitMq\RpcClient;
 use Kdyby\RabbitMq\RpcServer;
 use Phalcon\DiInterface;
+use VideoRecruit\Phalcon\RabbitMq\DI\RabbitMqExtension;
 
 /**
  * Class Connection
@@ -40,7 +41,7 @@ class Connection extends KdybyConnection
 	 */
 	public function getConsumer($name)
 	{
-		$service = 'rabbitmq.consumer.' . $name;
+		$service = RabbitMqExtension::PREFIX_CONSUMER . $name;
 
 		if (!$this->di->has($service)) {
 			throw new InvalidArgumentException("Unknown consumer {$name}");
@@ -56,7 +57,7 @@ class Connection extends KdybyConnection
 	 */
 	public function getProducer($name)
 	{
-		$service = 'rabbitmq.producer.' . $name;
+		$service = RabbitMqExtension::PREFIX_PRODUCER . $name;
 
 		if (!$this->di->has($service)) {
 			throw new InvalidArgumentException("Unknown producer {$name}");
@@ -72,7 +73,7 @@ class Connection extends KdybyConnection
 	 */
 	public function getRpcClient($name)
 	{
-		$service = 'rabbitmq.rpcClient.' . $name;
+		$service = RabbitMqExtension::PREFIX_RPC_CLIENT . $name;
 
 		if (!$this->di->has($service)) {
 			throw new InvalidArgumentException("Unknown RPC client {$name}");
@@ -88,7 +89,7 @@ class Connection extends KdybyConnection
 	 */
 	public function getRpcServer($name)
 	{
-		$service = 'rabbitmq.rpcServer.' . $name;
+		$service = RabbitMqExtension::PREFIX_RPC_SERVER . $name;
 
 		if (!$this->di->has($service)) {
 			throw new InvalidArgumentException("Unknown RPC server {$name}");
