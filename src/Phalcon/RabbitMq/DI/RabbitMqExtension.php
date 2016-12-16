@@ -104,6 +104,15 @@ class RabbitMqExtension
 	/**
 	 * @var array
 	 */
+	public $rpcServerDefaults = [
+		'connection' => 'default',
+		'callback' => NULL,
+		'qos' => [],
+	];
+
+	/**
+	 * @var array
+	 */
 	public $exchangeDefaults = [
 		'passive' => FALSE,
 		'durable' => TRUE,
@@ -417,6 +426,49 @@ class RabbitMqExtension
 	private function loadRpcServers(array $rpcServers)
 	{
 		$rpcServerServices = [];
+
+		foreach ($rpcServers as $name => $config) {
+			$config = $this->mergeConfigs($config, $this->rpcServerDefaults);
+			$config['callback'] = $this->fixCallback($this->di, $config['callback']);
+
+			$calls = [
+				[
+					'method' => 'initServer',
+					'arguments' => [
+						$this->createParameter($name),
+					],
+				],
+				[
+					'method' => 'setCallback',
+					'arguments' => [
+						$this->createParameter($config['callback']),
+					],
+				]
+			];
+
+			if (array_filter($config['qos'])) { // has values
+				$config['qos'] = $this->mergeConfigs($config['qos'], $this->qosDefaults);
+				$calls[] = [
+					'method' => 'setQosOptions',
+					'arguments' => [
+						$this->createParameter($config['qos']['prefetchSize']),
+						$this->createParameter($config['qos']['prefetchCount']),
+						$this->createParameter($config['qos']['global']),
+					],
+				];
+			}
+
+			$serviceName = self::PREFIX_RPC_SERVER . $name;
+			$this->di->setShared($serviceName, [
+				'className' => 'Kdyby\RabbitMq\RpcServer',
+				'arguments' => [
+					$this->createParameter($this->di->get(self::PREFIX_CONNECTION . $config['connection'])),
+				],
+				'calls' => $calls,
+			]);
+
+			$rpcServerServices[$name] = $serviceName;
+		}
 
 		// list of all registered rpc clients
 		$this->di->setShared(self::RPC_SERVERS, new Config($rpcServerServices));
