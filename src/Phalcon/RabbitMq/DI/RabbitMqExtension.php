@@ -371,7 +371,10 @@ class RabbitMqExtension
 	 */
 	private function loadRpcClients(array $rpcClients)
 	{
-		// todo
+		$rpcClientServices = [];
+
+		// list of all registered rpc clients
+		$this->di->setShared(self::RPC_CLIENTS, new Config($rpcClientServices));
 	}
 
 	/**
@@ -381,7 +384,10 @@ class RabbitMqExtension
 	 */
 	private function loadRpcServers(array $rpcServers)
 	{
-		// todo
+		$rpcServerServices = [];
+
+		// list of all registered rpc clients
+		$this->di->setShared(self::RPC_SERVERS, new Config($rpcServerServices));
 	}
 
 	/**
