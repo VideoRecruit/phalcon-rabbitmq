@@ -21,7 +21,7 @@ class RabbitMqExtension
 	const PREFIX_CONSUMER = 'rabbitmq.consumer.';
 	const PREFIX_RPC_CLIENT = 'rabbitmq.rpc.client.';
 	const PREFIX_RPC_SERVER = 'rabbitmq.rpc.server.';
-	const PREFIX_CONSOLE_COMMAND = 'rabbitmq.command';
+	const PREFIX_CONSOLE_COMMAND = 'rabbitmq.command.';
 
 	const PRODUCERS = 'rabbitmq.producers';
 	const CONSUMERS = 'rabbitmq.consumers';
