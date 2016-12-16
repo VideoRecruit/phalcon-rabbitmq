@@ -96,6 +96,14 @@ class RabbitMqExtension
 	/**
 	 * @var array
 	 */
+	public $rpcClientDefaults = [
+		'connection' => 'default',
+		'expectSerializedResponse' => TRUE,
+	];
+
+	/**
+	 * @var array
+	 */
 	public $exchangeDefaults = [
 		'passive' => FALSE,
 		'durable' => TRUE,
@@ -372,6 +380,30 @@ class RabbitMqExtension
 	private function loadRpcClients(array $rpcClients)
 	{
 		$rpcClientServices = [];
+
+		foreach ($rpcClients as $name => $config) {
+			$config = $this->mergeConfigs($config, $this->rpcClientDefaults);
+
+			$calls = [
+				[
+					'method' => 'initClient',
+					'arguments' => [
+						$this->createParameter($config['expectSerializedResponse']),
+					],
+				]
+			];
+
+			$serviceName = self::PREFIX_RPC_CLIENT . $name;
+			$this->di->setShared($serviceName, [
+				'className' => 'Kdyby\RabbitMq\RpcClient',
+				'arguments' => [
+					$this->createParameter($this->di->get(self::PREFIX_CONNECTION . $config['connection'])),
+				],
+				'calls' => $calls,
+			]);
+
+			$rpcClientServices[$name] = $serviceName;
+		}
 
 		// list of all registered rpc clients
 		$this->di->setShared(self::RPC_CLIENTS, new Config($rpcClientServices));
