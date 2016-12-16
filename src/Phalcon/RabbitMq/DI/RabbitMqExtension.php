@@ -137,16 +137,14 @@ class RabbitMqExtension
 	 * RabbitMqExtension constructor.
 	 *
 	 * @param DiInterface $di
-	 * @param array|string $config
+	 * @param array|Config $config
 	 * @throws InvalidArgumentException
 	 */
 	public function __construct(DiInterface $di, $config)
 	{
 		$this->di = $di;
 
-		if (is_string($config)) {
-			$config = (array) $di->get($config);
-		} elseif ($config instanceof Config) {
+		if ($config instanceof Config) {
 			$config = $config->toArray();
 		} elseif (!is_array($config)) {
 			throw new InvalidArgumentException('Config has to be either an array or ' .
@@ -167,7 +165,7 @@ class RabbitMqExtension
 	 * Register producer/consumer/RPCClient/RPCServer services into the DI container.
 	 *
 	 * @param DiInterface $di
-	 * @param array|string $config
+	 * @param array|Config $config
 	 * @return self
 	 * @throws InvalidArgumentException
 	 */
