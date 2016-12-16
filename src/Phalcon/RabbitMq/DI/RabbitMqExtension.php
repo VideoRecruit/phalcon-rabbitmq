@@ -16,18 +16,18 @@ use VideoRecruit\Phalcon\RabbitMq\InvalidArgumentException;
  */
 class RabbitMqExtension
 {
-	const PREFIX_CONNECTION = 'rabbitmq.connection.';
-	const PREFIX_PRODUCER = 'rabbitmq.producer.';
-	const PREFIX_CONSUMER = 'rabbitmq.consumer.';
-	const PREFIX_RPC_CLIENT = 'rabbitmq.rpc.client.';
-	const PREFIX_RPC_SERVER = 'rabbitmq.rpc.server.';
-	const PREFIX_CONSOLE_COMMAND = 'rabbitmq.command.';
+	const PREFIX_CONNECTION = 'videorecruit.rabbitmq.connection.';
+	const PREFIX_PRODUCER = 'videorecruit.rabbitmq.producer.';
+	const PREFIX_CONSUMER = 'videorecruit.rabbitmq.consumer.';
+	const PREFIX_RPC_CLIENT = 'videorecruit.rabbitmq.rpc.client.';
+	const PREFIX_RPC_SERVER = 'videorecruit.rabbitmq.rpc.server.';
+	const PREFIX_CONSOLE_COMMAND = 'videorecruit.rabbitmq.command.';
 
-	const PRODUCERS = 'rabbitmq.producers';
-	const CONSUMERS = 'rabbitmq.consumers';
-	const RPC_CLIENTS = 'rabbitmq.rpc.clients';
-	const RPC_SERVERS = 'rabbitmq.rpc.servers';
-	const CONSOLE_COMMANDS = 'rabbitmq.commands';
+	const PRODUCERS = 'videorecruit.rabbitmq.producers';
+	const CONSUMERS = 'videorecruit.rabbitmq.consumers';
+	const RPC_CLIENTS = 'videorecruit.rabbitmq.rpc.clients';
+	const RPC_SERVERS = 'videorecruit.rabbitmq.rpc.servers';
+	const CONSOLE_COMMANDS = 'videorecruit.rabbitmq.commands';
 
 	/**
 	 * @var DiInterface
