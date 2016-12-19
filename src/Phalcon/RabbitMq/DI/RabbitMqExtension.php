@@ -2,6 +2,11 @@
 
 namespace VideoRecruit\Phalcon\RabbitMq\DI;
 
+use Kdyby\RabbitMq\AmqpMember;
+use Kdyby\RabbitMq\IConsumer;
+use Kdyby\RabbitMq\IProducer;
+use Kdyby\RabbitMq\RpcClient;
+use Kdyby\RabbitMq\RpcServer;
 use Nette\DI\Config\Helpers as ConfigHelpers;
 use Phalcon\Config;
 use Phalcon\DiInterface;
@@ -189,6 +194,50 @@ class RabbitMqExtension
 	public static function register(DiInterface $di, $config)
 	{
 		return new self($di, $config);
+	}
+
+	/**
+	 * @param DiInterface $di
+	 * @param string $name
+	 * @return IConsumer
+	 * @throws InvalidArgumentException
+	 */
+	public static function getConsumer(DiInterface $di, $name)
+	{
+		return self::getAmqpMember($di, $name, self::PREFIX_CONSUMER);
+	}
+
+	/**
+	 * @param DiInterface $di
+	 * @param string $name
+	 * @return IProducer
+	 * @throws InvalidArgumentException
+	 */
+	public static function getProducer(DiInterface $di, $name)
+	{
+		return self::getAmqpMember($di, $name, self::PREFIX_PRODUCER);
+	}
+
+	/**
+	 * @param DiInterface $di
+	 * @param string $name
+	 * @return RpcClient
+	 * @throws InvalidArgumentException
+	 */
+	public static function getRpcClient(DiInterface $di, $name)
+	{
+		return self::getAmqpMember($di, $name, self::PREFIX_RPC_CLIENT);
+	}
+
+	/**
+	 * @param DiInterface $di
+	 * @param string $name
+	 * @return RpcServer
+	 * @throws InvalidArgumentException
+	 */
+	public static function getRpcServer(DiInterface $di, $name)
+	{
+		return self::getAmqpMember($di, $name, self::PREFIX_RPC_SERVER);
 	}
 
 	/**
@@ -569,5 +618,23 @@ class RabbitMqExtension
 		}
 
 		return $callback;
+	}
+
+	/**
+	 * @param DiInterface $di
+	 * @param string $name
+	 * @param string $prefix
+	 * @return AmqpMember
+	 * @throws InvalidArgumentException
+	 */
+	private static function getAmqpMember(DiInterface $di, $name, $prefix)
+	{
+		$service = $prefix . $name;
+
+		if (!$di->has($service)) {
+			throw new InvalidArgumentException("Unknown producer {$name}");
+		}
+
+		return $di->get($service);
 	}
 }
