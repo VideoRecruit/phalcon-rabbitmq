@@ -10,9 +10,11 @@ use Kdyby\RabbitMq\RpcServer;
 use Nette\DI\Config\Helpers as ConfigHelpers;
 use Phalcon\Config;
 use Phalcon\DiInterface;
+use Symfony\Component\Console\Application;
 use VideoRecruit\Phalcon\RabbitMq\Commands\SetupFabricCommand;
 use VideoRecruit\Phalcon\RabbitMq\Connection;
 use VideoRecruit\Phalcon\RabbitMq\InvalidArgumentException;
+use VideoRecruit\Phalcon\RabbitMq\InvalidStateException;
 
 /**
  * Class RabbitMqExtension
@@ -194,6 +196,28 @@ class RabbitMqExtension
 	public static function register(DiInterface $di, $config)
 	{
 		return new self($di, $config);
+	}
+
+	/**
+	 * Helper to add all available commands into the console application.
+	 *
+	 * @param Application $consoleApp
+	 * @param DiInterface $di
+	 * @return Application
+	 * @throws InvalidStateException
+	 */
+	public static function addCommands(Application $consoleApp, DiInterface $di)
+	{
+		if (!$di->has(self::CONSOLE_COMMANDS)) {
+			throw new InvalidStateException('There are no migration commands. ' .
+				'Did you register the extension before?');
+		}
+
+		foreach ($di->get(self::CONSOLE_COMMANDS) as $serviceName) {
+			$consoleApp->add($di->get($serviceName));
+		}
+
+		return $consoleApp;
 	}
 
 	/**
